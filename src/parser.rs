@@ -7,9 +7,15 @@ use tracy_client::span;
 
 pub struct Parser {
     pub compiler: Compiler,
+    // current position
+    // TODO: why is it public ?
     pub span_offset: usize,
+    // total length
     content_length: usize,
+    // none if not parsed yet
     next_token: Option<Token>,
+    // if next_token.is_none() == span_offset
+    // else next_token.span.end
     next_offset: usize,
 }
 
@@ -1244,6 +1250,7 @@ impl Parser {
     }
 
     pub fn block(&mut self, context: BlockContext) -> NodeId {
+        eprintln!("block() start");
         let _span = span!();
         let span_start = self.position();
 
@@ -1253,6 +1260,7 @@ impl Parser {
         }
 
         while self.has_tokens() {
+            eprintln!("block() while");
             if self.is_rcurly() && context == BlockContext::Curlies {
                 self.rcurly();
                 break;
@@ -2587,6 +2595,7 @@ impl Parser {
     // Returns next token, or None if end of source has been reached.
     // If token is returned, the span_offset is increased.
     pub fn next_bareword(&mut self, name_strictness: NameStrictness) -> Option<Token> {
+        eprintln!("next_bareword()");
         let _span = span!();
 
         if let Some(token) = self.next_token {
@@ -2615,12 +2624,14 @@ impl Parser {
                 } else if char == b'\r' || char == b'\n' {
                     return self.newline();
                 } else {
+                    eprintln!("lex_bareword {} {}", self.span_offset, char);
                     return self.lex_bareword(name_strictness);
                 }
             }
         }
     }
 
+    // TODO: what is a rollback point ?
     fn get_rollback_point(&self) -> RollbackPoint {
         self.compiler.get_rollback_point(self.span_offset)
     }

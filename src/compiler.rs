@@ -13,6 +13,8 @@ pub struct RollbackPoint {
     span_offset: usize,
 }
 
+// TODO: why not use std::ops::Range ?
+// A half open range (start <= x < end)
 #[derive(Debug, Clone, Copy)]
 pub struct Span {
     pub start: usize,
@@ -27,6 +29,7 @@ pub struct Compiler {
     pub node_types: Vec<TypeId>,
     // node_lifetimes: Vec<AllocationLifetime>,
     pub blocks: Vec<Block>, // Blocks, indexed by BlockId
+    // This contains all files concatenated
     pub source: Vec<u8>,
     pub file_offsets: Vec<(String, usize, usize)>, // fname, start, end
 

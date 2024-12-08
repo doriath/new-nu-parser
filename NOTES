@@ -1,0 +1,14 @@
+1. Parser -> Compiler - weird cyclic dependency
+  - can we break it ?
+
+2. Parser includes lexer - could we split it?
+
+3. Is the order of checks in lexer the most efficient ?
+
+4. Currently we skip comments - should we parse it explicitly?
+
+5. What is a NodeId?
+
+6. What is a BlockId?
+
+7. why resolution works from the last ast node? maybe the ast nodes are added somehow recursively ?

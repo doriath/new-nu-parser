@@ -26,16 +26,21 @@ fn main() {
             eprintln!("can't find {}", fname);
             exit(1);
         };
+        eprintln!("test");
 
         let span_offset = compiler.span_offset();
         compiler.add_file(&fname, &contents);
+        eprintln!("added file, creating parser");
 
         let parser = Parser::new(compiler, span_offset);
+        eprintln!("parser created, started parsing");
         compiler = parser.parse();
+        eprintln!("parsing finished");
 
         if do_print {
             compiler.print();
         }
+        eprintln!("test");
 
         if !compiler.errors.is_empty() {
             exit(1);
